@@ -2,10 +2,9 @@ import logging
 import json
 import ast
 
-from user import User, Userlist
-from topo import Softsw, Topo
-from path import Path, Pathlist
-from rule import Rule
+from vpc import Vpclist, Vpc, Vchain, Vtenant
+from topo import Topo, Controller, Softsw, Endpoint
+from rule import Chain_hprlist, Vpc_prlist, Rule
 
 from ryu.base import app_manager
 from ryu.controller import ofp_event
@@ -441,10 +440,10 @@ class StatsController(ControllerBase):
     @das_get_method
     def switch_lookup(self, req, id, **kwargs):
         sw = self.rule.topo.get_softsw(int(str(id), 0))
-	if(sw != None):
-	    return sw.data
-	else:
-	    return None
+    if(sw != None):
+        return sw.data
+    else:
+        return None
 
     @das_set_method
     def host_add(self, req, cfg, id, **kwargs):
@@ -461,34 +460,34 @@ class StatsController(ControllerBase):
     @das_get_method
     def host_lookup(self, req, id, **kwargs):
         host = self.rule.topo.get_host(int(str(id), 0))
-	if(host != None):
-	    return host.data
-	else:
-	    return None
+    if(host != None):
+        return host.data
+    else:
+        return None
 
     @das_set_method
     def user_add(self, req, cfg, id, **kwargs):
-	userlist = self.rule.userlist
-	userlist.add_user(int(str(id), 0), cfg)
+    userlist = self.rule.userlist
+    userlist.add_user(int(str(id), 0), cfg)
 
     @das_set_method
     def user_del(self, req, cfg, id, **kwargs):
-	userlist = self.rule.userlist
-	userlist.del_user(int(str(id), 0))
+    userlist = self.rule.userlist
+    userlist.del_user(int(str(id), 0))
 
     @das_set_method
     def user_modify(self, req, cfg, id, **kwargs):
-	userlist = self.rule.userlist
-	userlist.set_user(int(str(id), 0), cfg)
+    userlist = self.rule.userlist
+    userlist.set_user(int(str(id), 0), cfg)
 
     @das_get_method
     def user_lookup(self, req, id, **kwargs):
-	userlist = self.rule.userlist
-	user = userlist.get_user(int(str(id), 0))
-	if(user != None):
-	    return user.data
-	else:
-	    return None
+    userlist = self.rule.userlist
+    user = userlist.get_user(int(str(id), 0))
+    if(user != None):
+        return user.data
+    else:
+        return None
 
 class RestStatsApi(app_manager.RyuApp):
     OFP_VERSIONS = [ofproto_v1_0.OFP_VERSION,

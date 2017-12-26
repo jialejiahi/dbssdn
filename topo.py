@@ -1,17 +1,47 @@
 import json
 
-class Softsw():
-    uplink_port = -1
-    def __init__(self, id, data):
-        self.id = id
+MAX_HOST_NUM=10000
+MAX_SWITCH_NUM=1000
+
+class Controller():
+    def __init__(self, data):
         self.data = data
-        print("class Softsw instance create id %d" % self.id)
+        #print("class Controller instance create url %s %s" \
+        #        % self.data["ip"], self.data["port"])
+        
+    def get_ctl_ip(self):
+        return self.data["ip"]
+ 
+    def get_ctl_port(self):
+        return self.data["port"]
+ 
+class Softsw():
+    def __init__(self, id, data):
+        self.data = data
+        uplink_port_no = -1
+        tun_uplink_port_no = -1
+        print("class Softsw instance create id %s" % self.data["id"])
         
     def get_id(self):
-        return self.id
+        return self.data["id"]
+    
+    def get_mac_from_id(self):
+        mac = hex(int(self.data["id"], 10))
+        mac = mac[2:]
+        while len(mac) < 12:
+            mac='0'+mac
+        mac = mac[0:2]+':'+mac[2:4]+':'+mac[4:6]+':' \
+             +mac[6:8]+':'+mac[8:10]+':'+mac[10:]
+        return mac
     
     def set_id(self, id):
-        self.id = id
+        self.data["id"] = id
+    
+    def get_uplink_name(self):
+        return self.data["uplink_port_name"]
+    
+    def set_uplink_name(self, port_name):
+        self.data["uplink_port_name"] = port_name
     
     def get_data(self):
         return self.data
@@ -19,56 +49,41 @@ class Softsw():
     def set_data(self, data):
         self.data = data
     
-    def get_data_id(self):
-        return self.data["data_id"]
-        
-    def set_data_id(self, data_id):
-        self.data["data_id"] = data_id
-            
-    def get_type(self):
-        return self.data["type"]
-        
-    def set_type(self, type):
-        self.data["type"] = type
-    
     def get_port_by_mac(self, mac):
-        for port in self.data["portdesc"]:
+        for port in self.portdesc:
             if mac[3:] == port["hw_addr"][3:]:
                 return port["port_no"]
         return -1
     
-    def get_uplink_port(self, type):
-        # type may be "server_ip", "server_ip_vlan", "server_ip_vxlan"
-        # for eth and vlan, the uplink port is set to the eth port link to the outside world
-        # for vxlan a patch port to the ovs-tun bridge is returned
-        if type == "server_ip":
-            self.uplink_port = self.data["uplink_port_no"]
-        elif type == "server_ip_vlan":
-            self.uplink_port = self.data["uplink_port_no"]
-        elif type == "server_ip_vxlan":
-            self.uplink_port = self.data["tun_uplink_port_no"]
-        else:
-            # type error, not a right uplink port type
-            return -1
-        return self.uplink_port
+    def get_uplink_portno(self):
+        for port in self.portdesc:
+            if port["name"] == self.data["uplink_port_name"]:
+                self.uplink_port_no = port["port_no"]
+
+        return self.uplink_port_no
+
+    def get_tun_uplink_portno(self):
+        for port in self.portdesc:
+            if port["name"] == "ovs-to-tun":
+                self.tun_uplink_port_no = port["port_no"]
+        return self.tun_uplink_port_no
 
     def get_portdesc(self):
-        return self.data["portdesc"]
+        return self.portdesc
         
     def set_portdesc(self, portdesc):
-        self.data["portdesc"] = portdesc
+        self.portdesc = portdesc
             
-class Host():
+class Endpoint():
     def __init__(self, id, data):
-        self.id = id
         self.data = data
-        print("class Hosts instance create id %d" % self.id)
+        print("class Endpoints instance create id %s" % self.data["id"])
         
     def get_id(self):
-        return self.id
+        return self.data["id"]
     
     def set_id(self, id):
-        self.id = id
+        self.data["id"] = id
     
     def get_data(self):
         return self.data
@@ -76,100 +91,143 @@ class Host():
     def set_data(self, data):
         self.data = data
         
-    def get_type(self):
-        return self.data["type"]
-    
-    def set_type(self, type):
-        self.data["type"] = type
-        
-    def get_in_port(self):
+    def get_in_mac(self):
         return self.data["in"]
     
-    def set_in_port(self, in_port):
+    def set_in_mac(self, in_port):
         self.data["in"] = in_port
     
-    def get_out_port(self):
+    def get_out_mac(self):
         return self.data["out"]
         
-    def set_out_port(self, out_port):
+    def set_out_mac(self, out_port):
         self.data["out"] = out_port
         
-    def get_in_sw(self):
-        return self.data["in_sw"]
+    def get_sw_id(self):
+        return self.data["to_ovs_id"]
     
-    def set_in_sw(self, in_sw):
-        self.data["in_sw"] = in_sw
+    def set_sw_id(self, sw_id):
+        self.data["to_ovs_id"] = sw_id
     
-    def get_out_sw(self):
-        return self.data["out_sw"]
-        
-    def set_out_sw(self, out_sw):
-        self.data["out_sw"] = out_sw
-
-MAX_HOST_NUM=10000
-MAX_SWITCH_NUM=1000
 class Topo():
-    data = {}
-
-    soft_switchs = [None] * MAX_SWITCH_NUM
-    host_list = [None] * MAX_HOST_NUM
+    #soft_switchs = [None] * MAX_SWITCH_NUM
+    #ep_list = [None] * MAX_HOST_NUM
+    soft_switchs = []
+    ep_list = []
+    controller = None
     
-    def __init__(self, nm = "Topo"):
+    def __init__(self, fname="topo.json", nm = "Topo"):
+        self.fname = fname
         self.name = nm
         print("class %s instance create instance" % self.name)
                 
+    def add_controller(self, data):
+        self.controller = Controller(data)
+        
+    def get_controller(self):
+        return self.controller
+            
+    def get_controller_ip(self):
+        return self.controller.get_ctl_ip()
+            
+    def get_controller_port(self):
+        return self.controller.get_ctl_port()
+            
     def add_softsw(self, id, data):
-        print("add softsw %d" % id)
-        self.soft_switchs.insert(id, Softsw(id, data))
+        self.soft_switchs.append(Softsw(id, data))
         
-    def add_host(self, id, data):
-        self.host_list.insert(id, Host(id, data))
-                        
-    def del_softsw(self, id):
-        del self.soft_switchs[id]
-        
-    def del_host(self, id):
-        del self.host_list[id]
-            
-    def get_softsw(self, id):
-        return self.soft_switchs[id]
-    
-    def get_softsw_by_data_id(self, data_id):
-        for sw in self.soft_switchs:
-            if data_id == sw.get_data_id():
-                return sw
-        return {}
-    
-    def get_host(self, id):
-        return self.host_list[id]
-            
     def set_softsw(self, id, data):
-        self.soft_switchs[id] = Softsw(id, data)
+        for i, sw in enumerate(self.soft_switchs):
+            if sw.get_id() == id:
+                self.soft_switchs[i].set_data(data)
         
-    def set_host(self, id, data):
-        self.host_list[id] = Host(id, data)
+    def del_softsw(self, id):
+        for i, sw in enumerate(self.soft_switchs):
+            if sw.get_id() == id:
+                del    self.soft_switchs[i]
         
-        
-    def load_topo_from_file(self):
-        with open("topo.json", 'r') as f:
-            self.data = json.load(f)
-                    
-        i = 0
-        for ssw in self.data["softsw"]:
-            self.add_softsw(i, ssw)
-            i += 1
+    def get_softsw(self, id):
+        for i, sw in enumerate(self.soft_switchs):
+            if sw.get_id() == id:
+                return self.soft_switchs[i]
+    
+    def get_softsw_uplink_portno(self, id):
+        sw = self.get_softsw(id)
+        print("get sw id %s" % id)
+        return sw.get_uplink_portno()
+    
+    def get_softsw_tun_uplink_portno(self, id):
+        sw = self.get_softsw(id)
+        return sw.get_tun_uplink_portno()
+    
+    def get_softsw_portno_by_mac(self, id, mac):
+        sw = self.get_softsw(id)
+        return sw.get_port_by_mac(mac)
+    
+    def get_softsw_portdesc(self, id):
+        sw = self.get_softsw(id)
+        return sw.get_portdesc()
+    
+    def set_softsw_portdesc(self, id, portdesc):
+        sw = self.get_softsw(id)
+        return sw.set_portdesc(portdesc)
+    
+    def add_ep(self, id, data):
+        self.ep_list.append(Endpoint(id, data))
+                        
+    def del_ep(self, id):
+        for i, ep in enumerate(self.ep_list):
+            if ep.get_id() == id:
+                del    self.ep_list[i]
             
-        i = 0
-        for host in self.data["hosts"]:
-            self.add_host(i, host)
-            i += 1
+    def get_ep(self, id):
+        for i, ep in enumerate(self.ep_list):
+            if ep.get_id() == id:
+                return self.ep_list[i]
+            
+    def set_ep(self, id, data):
+        for i, ep in enumerate(self.ep_list):
+            if ep.get_id() == id:
+                self.ep_list[i].set_data(data)
+        
+    def get_ep_in_mac(self, id):
+        ep = get_ep(id)
+        return ep.get_in_mac()
+            
+    def get_ep_out_mac(self, id):
+        ep = get_ep(id)
+        return ep.get_out_mac()
+            
+    def get_ep_sw_id(self, id):
+        ep = get_ep(id)
+        return ep.get_sw_id()
+            
+    def get_ep_in_port(self, id):
+        mac = get_ep_in_mac(id)
+        swid = get_ep_sw_id(id)
+        return get_softsw_portno_by_mac(swid, mac)
+            
+    def get_ep_out_port(self, id):
+        mac = get_ep_out_mac(id)
+        swid = get_ep_sw_id(id)
+        return get_softsw_portno_by_mac(swid, mac)
+            
+    def load_topo_from_file(self):
+        with open(self.fname, 'r+') as f:
+            self.data = json.load(f)
+        
+        self.add_controller(self.data["controller"])
+        for i, ssw in enumerate(self.data["softsw"]):
+            self.add_softsw(ssw["id"], ssw)
+            
+        for i, ep in enumerate(self.data["endpoints"]):
+            self.add_ep(ep["id"], ep)
         
     def save_topo_to_file(self):
         for ssw in soft_switchs:
             self.data["softsw"][ssw.get_id()] = ssw.get_data()
-        for host in host_list:
-            self.data["hosts"][host.get_id()] = host.get_data()
+        for ep in ep_list:
+            self.data["endpoints"][ep.get_id()] = ep.get_data()
         
-        with open("topo_w.json", 'w') as f:
+        with open(self.fname, 'r+') as f:
             f.write(json.dumps(data))
-
