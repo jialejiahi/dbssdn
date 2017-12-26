@@ -121,7 +121,7 @@ class Vtenant():
         self.data["cutin"]["router_outer_mac"] = router_outer_mac
         
 class Vchain():
-    def __init__(self, id, data):
+    def __init__(self, data):
         self.data = data
     
     def get_data(self):
@@ -133,12 +133,12 @@ class Vchain():
     def get_id(self):
         return self.data["id"]
         
-    def set_id(self, id):
-        self.data["id"] = id
-        
+    def set_id(self, chainid):
+        self.data["id"] = chainid
+
     def get_match(self):
         return self.data["match"]
-        
+
     def set_match(self, match):
         self.data["match"] = match
         
@@ -174,12 +174,10 @@ class Vchain():
         
 class Vpc():
     version = 0.1
-    #chain_list = [None] * MAX_CHAIN_NUM
-    chain_list = []
-    def __init__(self, id, data):
-        self.id = id
+
+    def __init__(self, data):
         self.data = data
-        print("class vpc instance create id %s" % self.id)
+        self.chain_list = []
     
     def get_data(self):
         return self.data
@@ -188,11 +186,11 @@ class Vpc():
         self.data = data
         
     def get_id(self):
-        return self.id
-        
-    def set_id(self, id):
-        self.id = id
-        
+        return self.data["id"]
+    
+    def set_id(self, vpcid):
+        self.data["id"] = vpcid
+    
     def get_tenant(self):
         return self.data["tenant"]
         
@@ -316,113 +314,112 @@ class Vpc():
     def set_endpoints(self, endpoints):
         self.data["endpoints"] = endpoints
     #limit chain id to 0~MAX_CHAIN_NUM, now 0~19
-    def add_chain(self, id, data):
-        self.chain_list.append(Vchain(id, data))
+    def add_chain(self, data):
+        self.chain_list.append(Vchain(data))
         
-    def del_chain(self, id):
+    def del_chain(self, chainid):
+		self.chain_list = [chain for chain in self.chain_list
+                                    if chain.get_id() != chainid]
+
+    def get_chain(self, chainid):
         for i, chain in enumerate(self.chain_list):
-            if chain.get_id() == id:
-                del    self.chain_list[i]
-        
-    def get_chain(self, id):
-        for i, chain in enumerate(self.chain_list):
-            if chain.get_id() == id:
+            if chain.get_id() == chainid:
                 return self.chain_list[i]
         
-    def set_chain(self, id, data):
+    def set_chain(self, chainid, data):
         for i, chain in enumerate(self.chain_list):
-            if chain.get_id() == id:
+            if chain.get_id() == chainid:
                 self.chain_list[i].set_data(data)
         
-    def get_chain_match(self, id):
-        chain = get_chain(id)    
+    def get_chain_match(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_match()
         
-    def set_chain_match(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_match(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_match(data)
         
-    def get_chain_match_subnet(self, id):
-        chain = get_chain(id)    
+    def get_chain_match_subnet(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_match_subnet()
         
-    def set_chain_match_subnet(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_match_subnet(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_match_subnet(data)
         
-    def get_chain_match_ethtype(self, id):
-        chain = get_chain(id)    
+    def get_chain_match_ethtype(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_match_ethtype()
         
-    def set_chain_match_ethtype(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_match_ethtype(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_match_ethtype(data)
         
-    def get_chain_match_proto(self, id):
-        chain = get_chain(id)    
+    def get_chain_match_proto(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_match_proto()
         
-    def set_chain_match_proto(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_match_proto(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_match_proto(data)
         
-    def get_chain_match_l4port(self, id):
-        chain = get_chain(id)    
+    def get_chain_match_l4port(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_match_l4port()
         
-    def set_chain_match_l4port(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_match_l4port(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_match_l4port(data)
         
-    def get_chain_pass_through(self, id):
-        chain = get_chain(id)    
+    def get_chain_pass_through(self, chainid):
+        chain = get_chain(chainid)    
         return chain.get_pass_through()
         
-    def set_chain_pass_through(self, id, data):
-        chain = get_chain(id)    
+    def set_chain_pass_through(self, chainid, data):
+        chain = get_chain(chainid)    
         chain.set_pass_through(data)
     
 class Vpclist():
-    data = []
-    #vpcs = [None] * MAX_VPC_NUM
-    vpcs = []
-
     def __init__(self, fname="vpc.json", nm = "Vpclist"):
-        self.fname = fname    
+        self.fname = fname
+        self.vpcs = []
+        self.data = []
         self.name = nm
         print("class %s instance create instance" % self.name)
-            
+
     def get_data(self):
         return self.data
+
     # limit vpc num to 0~MAX_VPC_NUM, now 0~63
-    def add_vpc(self, id, data):
-        self.vpcs.append(Vpc(id, data))
+    def add_vpc(self, vpcid, data):
+        self.vpcs.append(Vpc(data))
         
-    def del_vpc(self, id):
+    def del_vpc(self, vpcid):
+		self.vpcs = [vpc for vpc in self.vpcs
+                             if vpc.get_id() != vpcid]
+
+    def get_vpc(self, vpcid):
         for i, vpc in enumerate(self.vpcs):
-            if vpc.get_id() == id:
-                del    self.vpcs[i]
-        
-    def get_vpc(self, id):
-        for i, vpc in enumerate(self.vpcs):
-            if vpc.get_id() == id:
+            if vpc.get_id() == vpcid:
                 return self.vpcs[i]
-        
-    def set_vpc(self, id, data):
+
+    def set_vpc(self, vpcid, data):
         for i, vpc in enumerate(self.vpcs):
-            if vpc.get_id() == id:
+            if vpc.get_id() == vpcid:
                 self.vpcs[i].set_data(data)
-        
+
     def load_vpcs_from_file(self):
         with open(self.fname, 'r+') as f:
             self.data = json.load(f)
 
-        for i, vpc in enumerate(self.data):
+        print self.data
+        for vpc in self.data:
             self.add_vpc(vpc["id"], vpc)
         
-        for i, vpc in enumerate(self.vpcs):
-            for j, chain in enumerate(vpc.data["chains"]):
-                vpc.add_chain(j, chain)
+        for vpc in self.vpcs:
+            for chain in vpc.data["chains"]:
+                print("adding chain: " + str(chain))
+                vpc.add_chain(chain)
 
     def save_vpcs_to_file(self):
         for vpc in vpcs:

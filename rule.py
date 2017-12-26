@@ -92,9 +92,8 @@ class Vpc_prlist():
         self.data.append(vpcpath)
 
     def del_vpc_path(self, vpcid):
-        for i, path in enumerate(self.data):
-            if path["vpcid"] == vpcid:
-                del self.data[i]
+		self.data = [vpc for vpc in self.data
+                             if vpc.get_id() != vpcid]
         
     def get_vpc_path(self, vpcid):
         for i, path in enumerate(self.data):
@@ -142,9 +141,8 @@ class Vpc_prlist():
                 vpc = self.data[i]
                 break
         if vpc != None:
-            for j, path in enumerate(self.data[i]["chain"]):
-                if path["chainid"] == chainid:
-                    del self.data[i]["chain"][j]
+		    self.data[i]["chain"] = [chain for chain in self.data[i]["chain"]
+                                             if chain.get_id() != chainid]
 
     def get_chain_path(self, vpcid, chainid):
         vpc = None
@@ -493,7 +491,7 @@ class Rule():
                           first_ovs_id, topo, ep, prevep):
         if prevep == None:
             # prev is None, there is only one node in this chain
-            calc_path_first_ep(dire, hprlist, first_ovs_id, topo, ep)
+            self.calc_path_first_ep(dire, hprlist, first_ovs_id, topo, ep)
         else:
             # prev is NOT None, there is more than one node in this chain
             self.calc_path_mid_ep(dire, hprlist, topo, ep, prevep)
@@ -571,6 +569,8 @@ class Rule():
             print("there are no endpoints in this chain, default rule")
             return hprlist
         elif length == 1:
+            pass_through = chain.get_pass_through()
+            ep = topo.get_ep(pass_through[0])
             self.calc_path_last_ep(dire, hprlist,
                               vpc.get_tenant_cutin_to_ovs_id(),
                               topo, ep, None)
@@ -768,7 +768,7 @@ class Rule():
         if length == 0:
             print("pnodes number is 0, reflect the packets of this chain's match")
             self.calc_rule_chain_bypass(dire, vpc, topo, chain, hprlist)
-            return
+            return hprlist
             
         #calc rule for each switch, at least three pnodes in a path
         for i, pnode in enumerate(hprlist.get_pnodes()):
@@ -825,13 +825,16 @@ class Rule():
                         next_hnode = hprlist.get_pnode(i+1)
                         self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
                                 None, prev_hnode, None, next_hnode, hprlist)
-        print(json.dumps(hprlist.get_rnodes()))
+        #print(json.dumps(hprlist.get_rnodes()))
         return hprlist
     # private functions end
 
     def add_vpclist_rules(self, vpclist, topo):
-        for i, vpc in enumerate(vpclist.vpcs):
+        for vpc in vpclist.vpcs:
+            for chain in vpc.chain_list:
+                print("outer add chain rules for " + json.dumps(chain.get_data()))
             self.add_vpc_rules(vpc, topo)
+        #print(json.dumps(self.vprlist.data))
 
     def get_vpclist_rules(self, vpclist):
         return self.vprlist.data
@@ -842,7 +845,8 @@ class Rule():
     def add_vpc_rules(self, vpc, topo):
         print("add vpc rules for " + json.dumps(vpc.get_data()))
         self.vprlist.create_vpc_path(vpc.get_id())
-        for i, chain in enumerate(vpc.chain_list):
+        for chain in vpc.chain_list:
+            #print("outer add chain rules for " + json.dumps(chain.get_data()))
             self.add_vpc_chain_rules(vpc, chain, topo)
 
     def get_vpc_rules(self, vpcid):
@@ -852,12 +856,15 @@ class Rule():
         self.vprlist.del_vpc_path(vpcid)
 
     def add_vpc_chain_rules(self, vpc, chain, topo):
-        print("add chain rules for " + json.dumps(chain.get_data()))
+        print("inner add chain rules for " + json.dumps(chain.get_data()))
         self.vprlist.create_chain_path(vpc.get_id(), chain.get_id())
         vprlist_ing = self.calc_rule_chain_one_dire("ingress", vpc, topo, chain)
         vprlist_egr = self.calc_rule_chain_one_dire("egress", vpc, topo, chain)
+        print("ingress: " + json.dumps(vprlist_ing.get_rnodes()))
+        print("egress: " + json.dumps(vprlist_egr.get_rnodes()))
         self.vprlist.set_ingress(vpc.get_id(), chain.get_id(), vprlist_ing)
         self.vprlist.set_egress(vpc.get_id(), chain.get_id(), vprlist_egr)
+        print("all: " + json.dumps(self.vprlist.data))
         
     def get_vpc_chain_rules(self, vpcid, chainid):
         return self.vprlist.get_chain_path(vpcid, chainid)
