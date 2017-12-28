@@ -1,251 +1,42 @@
 {
+    "controller":{
+        "ip":"10.11.200.121",
+        "port":"8080"
+    },
     "softsw":[
         {
-            "id":0,
-            "data_id":156399244705346,
-            "uplink_port_mac": "8e:3e:89:6c:7e:42",
-            "uplink_port_no" : 6,
-            "tun_uplink_port_no" : 9,
-            "portdesc":[
-                {
-                    "hw_addr":"8e:3e:89:6c:7e:42",
-                    "curr":0,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":"LOCAL",
-                    "curr_speed":0,
-                    "name":"ovsnet1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"f2:11:88:1f:6a:da",
-                    "curr":0,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":9,
-                    "curr_speed":0,
-                    "name":"ovs-to-tun",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f7:00:00:0f",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":5,
-                    "curr_speed":10000,
-                    "name":"one-1607-3",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f7:00:00:10",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":1,
-                    "curr_speed":10000,
-                    "name":"one-1604-1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f7:00:00:0e",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":4,
-                    "curr_speed":10000,
-                    "name":"one-1607-2",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"8e:b4:29:40:6b:88",
-                    "curr":2112,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":6,
-                    "curr_speed":10000000,
-                    "name":"ovsnet1_veth1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f7:00:00:11",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":2,
-                    "curr_speed":10000,
-                    "name":"one-1604-2",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f7:00:00:0d",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":3,
-                    "curr_speed":10000,
-                    "name":"one-1607-1",
-                    "state":0,
-                    "config":0
-                }
-            ]
+            "id":"156399244705346",
+            "uplink_port_name": "ovsnet1_veth1"
         },
         {
-            "id": 1,
-            "data_id": 135193144949313,
-            "uplink_port_mac": "7a:f5:1b:61:7a:41",
-            "uplink_port_no" : 6,
-            "tun_uplink_port_no" : -1,
-            "portdesc": [
-                {
-                    "hw_addr":"46:fa:f3:6b:bc:8d",
-                    "curr":2112,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":6,
-                    "curr_speed":10000000,
-                    "name":"ovsnet2_veth1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f6:00:00:6a",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":4,
-                    "curr_speed":10000,
-                    "name":"one-1609-1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"7a:f5:1b:61:7a:41",
-                    "curr":0,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":"LOCAL",
-                    "curr_speed":0,
-                    "name":"ovsnet2",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f6:00:00:67",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":1,
-                    "curr_speed":10000,
-                    "name":"one-1608-1",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f6:00:00:6b",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":5,
-                    "curr_speed":10000,
-                    "name":"one-1609-2",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f6:00:00:68",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":2,
-                    "curr_speed":10000,
-                    "name":"one-1608-2",
-                    "state":0,
-                    "config":0
-                },
-                {
-                    "hw_addr":"fe:11:f6:00:00:69",
-                    "curr":2050,
-                    "supported":0,
-                    "max_speed":0,
-                    "advertised":0,
-                    "peer":0,
-                    "port_no":3,
-                    "curr_speed":10000,
-                    "name":"one-1608-3",
-                    "state":0,
-                    "config":0
-                }
-            ]
+            "id":"135193144949313",
+            "uplink_port_name": "ovsnet2_veth1"
         }
     ],
-    "hosts":[
+    "endpoints":[
         {
-            "id":0,
-            "type":"waf",
+            "id":"0",
             "in": "00:11:f7:00:00:0e",
             "out":"00:11:f7:00:00:0f",
-            "in_sw": 156399244705346,
-            "out_sw":156399244705346
+            "to_ovs_id":"156399244705346"
         },
         {
-            "id":1,
-            "type":"waf",
+            "id":"1",
             "in": "00:11:f6:00:00:68",
             "out":"00:11:f6:00:00:69",
-            "in_sw": 135193144949313,
-            "out_sw":135193144949313
+            "to_ovs_id":"135193144949313"
         },
         {
-            "id":2,
-            "type":"fw",
+            "id":"2",
             "in": "00:11:f7:00:00:10",
             "out":"00:11:f7:00:00:11",
-            "in_sw": 156399244705346,
-            "out_sw":156399244705346
+            "to_ovs_id":"156399244705346"
         },
         {
-            "id":3,
-            "type":"fw",
+            "id":"3",
             "in": "00:11:f6:00:00:6a",
             "out":"00:11:f6:00:00:6b",
-            "in_sw": 135193144949313,
-            "out_sw":135193144949313
+            "to_ovs_id":"135193144949313"
         }
     ]
 }

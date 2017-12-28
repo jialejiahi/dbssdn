@@ -14,7 +14,7 @@
             }
         },
         "endpoints":[
-            "0","1","2","3"
+            "0","3"
         ],
         "chains":[
             {
@@ -26,7 +26,7 @@
                     "l4port":0
                 },
                 "pass_through":[
-                    "2","3"
+                    "3"
                 ]
             },
             {
@@ -38,7 +38,7 @@
                     "l4port":80
                 },
                 "pass_through":[
-                    "0","1","2","3"
+                    "0","3"
                 ]
             }
         ]
@@ -59,7 +59,7 @@
             }
         },
         "endpoints":[
-            "0","1","2","3"
+            "1","2"
         ],
         "chains": [
             {
@@ -71,7 +71,7 @@
                     "l4port":0
                 },
                 "pass_through":[
-                    "2","3"
+                    "2"
                 ]
             },
             {
@@ -83,101 +83,9 @@
                     "l4port":80
                 },
                 "pass_through":[
-                    "0","1","2","3"
+                    "1","2"
                 ]
             }
-        ]
-    },
-    {
-        "id":"2",
-        "tenant": {
-            "subnets": [
-                 "172.16.4.0/24"
-            ],
-            "cutin":{
-                "type": "vxlan+route",
-                "vni": 200,
-                "router_outer_ip":"192.168.46.254",
-                "router_outer_mac":"02:00:0a:0b:58:98",
-                "router_ip":"172.16.4.1",
-                "router_mac":"06:69:30:4f:95:6e",
-                "to_ovs_id":"156399244705346",
-                "to_ovs_ip": "192.168.46.1"
-            }
-        },
-        "endpoints":[
-            "0","1","2","3"
-        ],
-        "chains": [
-            {
-                "id":0,
-                "match": {
-                    "subnet":"172.16.4.0/24",
-                    "ethtype":2048,
-                    "proto":0,
-                    "l4port":0
-                },
-                "pass_through":[
-                    "2","3"
-                ]
-            },
-            {
-                "id":1,
-                "match": {
-                    "subnet":"172.16.4.1/32",
-                    "ethtype":2048,
-                    "proto":6,
-                    "l4port":80
-                },
-                "pass_through":[
-                    "0","1","2","3"
-                ]
-            }
-        ]
-    },
-    {
-        "id":"3",
-        "tenant": {
-            "subnets": [
-                 "192.168.40.0/24"
-            ],
-            "cutin":{
-                "type": "route",
-                "router_ip":"192.168.47.254",
-                "router_mac":"02:00:0a:0b:58:98",
-                "to_ovs_id":"135193144949313",
-                "to_ovs_ip": "192.168.47.1"
-            }
-        },
-        "endpoints":[
-            "0","1","2","3"
-        ],
-        "chains": [
-           {
-                "id":0,
-                "match": {
-                    "subnet":"192.168.40.0/24",
-                    "ethtype":2048,
-                    "proto":0,
-                    "l4port":0
-                },
-                "pass_through":[
-                    "2","3"
-                ]
-            },
-            {
-                "id":1,
-                "match": {
-                    "subnet":"192.168.40.1/32",
-                    "ethtype":2048,
-                    "proto":6,
-                    "l4port":80
-                },
-                "pass_through":[
-                    "0","1","2","3"
-                ]
-            }
- 
         ]
     }
 ]
