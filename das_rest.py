@@ -2,7 +2,7 @@ import logging
 import json
 import ast
 
-from vpc import Vpclist, Vpc, Vchain, Vtenant
+from vpc import Vpclist, Vpc, Vchain
 from topo import Topo, Controller, Softsw, Endpoint
 from rule import Chain_hprlist, Vpc_prlist, Rule
 
