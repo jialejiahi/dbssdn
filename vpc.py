@@ -1,4 +1,5 @@
 import json
+# from ryu.app.dbssdn.topo import Topo, Softsw
 
 MAX_RULE_NUM = 64000
 VPC_PRIO_STEP = 1000
@@ -7,7 +8,7 @@ MAX_VPC_NUM = MAX_RULE_NUM / VPC_PRIO_STEP
 MAX_CHAIN_NUM = VPC_PRIO_STEP / CHAIN_PRIO_STEP
 
 
-class Vtenant():
+class Vtenant:
     def __init__(self, data):
         self.data = data
 
@@ -32,8 +33,8 @@ class Vtenant():
     def get_cutin_type(self):
         return self.data["cutin"]["type"]
 
-    def set_cutin_type(self, type):
-        self.data["cutin"]["type"] = type
+    def set_cutin_type(self, ctype):
+        self.data["cutin"]["type"] = ctype
 
     def get_cutin_router_ip(self):
         return self.data["cutin"]["router_ip"]
@@ -47,82 +48,76 @@ class Vtenant():
     def set_cutin_router_mac(self, router_mac):
         self.data["cutin"]["router_mac"] = router_mac
 
-    def get_cutin_to_ovs_id(self):
-        return self.data["cutin"]["to_ovs_id"]
+    def get_cutin_to_node_id(self):
+        return self.data["cutin"]["to_node_id"]
 
-    def set_cutin_to_ovs_id(self, to_ovs_id):
-        self.data["cutin"]["to_ovs_id"] = to_ovs_id
+    def set_cutin_to_node_id(self, to_node_id):
+        self.data["cutin"]["to_node_id"] = to_node_id
 
-    def get_cutin_type(self):
-        return self.data["cutin"]["type"]
+    def get_cutin_to_node_ip(self):
+        return self.data["cutin"]["to_node_ip"]
 
-    def set_cutin_type(self, type):
-        self.data["cutin"]["type"] = type
-
-    def get_cutin_to_ovs_ip(self):
-        return self.data["cutin"]["to_ovs_ip"]
-
-    def set_cutin_to_ovs_ip(self, to_ovs_ip):
-        self.data["cutin"]["to_ovs_ip"] = to_ovs_ip
+    def set_cutin_to_node_ip(self, to_node_ip):
+        self.data["cutin"]["to_node_ip"] = to_node_ip
 
     def get_cutin_vid(self):
-        type = get_cutin_type()
-        if type != "vlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vlan+route":
             print("error, try to get vid while it's not vlan type")
             return None
         return self.data["cutin"]["vid"]
 
     def set_cutin_vid(self, vid):
-        type = get_cutin_type()
-        if type != "vlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vlan+route":
             print("error, try to get vid while it's not vlan type")
             return None
         self.data["cutin"]["vid"] = vid
 
     def get_cutin_vni(self):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get vni while it's not vxlan type")
             return None
         return self.data["cutin"]["vni"]
 
     def set_cutin_vni(self, vni):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get vni while it's not vxlan type")
             return None
         self.data["cutin"]["vni"] = vni
 
     def get_cutin_router_outer_ip(self):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_ip while it's not vxlan type")
             return None
         return self.data["cutin"]["router_outer_ip"]
 
     def set_cutin_router_outer_ip(self, router_outer_ip):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_ip while it's not vxlan type")
             return None
         self.data["cutin"]["router_outer_ip"] = router_outer_ip
 
     def get_cutin_router_outer_mac(self):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_mac while it's not vxlan type")
             return None
         return self.data["cutin"]["router_outer_mac"]
 
     def set_cutin_router_outer_mac(self, router_outer_mac):
-        type = get_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_mac while it's not vxlan type")
             return None
         self.data["cutin"]["router_outer_mac"] = router_outer_mac
 
 
-class Vchain():
+class Vchain:
     def __init__(self, data):
         self.data = data
 
@@ -175,12 +170,13 @@ class Vchain():
         self.data["pass_through"] = pass_through
 
 
-class Vpc():
+class Vpc:
     version = 0.1
 
     def __init__(self, data):
         self.data = data
         self.chain_list = []
+        self.ep_chain_refcnt = {}
 
     def get_data(self):
         return self.data
@@ -215,8 +211,8 @@ class Vpc():
     def get_tenant_cutin_type(self):
         return self.data["tenant"]["cutin"]["type"]
 
-    def set_tenant_cutin_type(self, type):
-        self.data["tenant"]["cutin"]["type"] = type
+    def set_tenant_cutin_type(self, ctype):
+        self.data["tenant"]["cutin"]["type"] = ctype
 
     def get_tenant_cutin_router_ip(self):
         return self.data["tenant"]["cutin"]["router_ip"]
@@ -230,11 +226,17 @@ class Vpc():
     def set_tenant_cutin_router_mac(self, router_mac):
         self.data["tenant"]["cutin"]["router_mac"] = router_mac
 
-    def get_tenant_cutin_to_ovs_id(self):
-        return self.data["tenant"]["cutin"]["to_ovs_id"]
+    def get_tenant_cutin_to_node_id(self):
+        return self.data["tenant"]["cutin"]["to_node_id"]
 
-    def get_tenant_to_ovs_mac(self):
-        ovsid = self.data["tenant"]["cutin"]["to_ovs_id"]
+    def get_tenant_to_ovs_id(self, topo):
+        node_id = self.get_tenant_cutin_to_node_id()
+        ovsid = topo.get_ovs_id_by_node(node_id)
+
+        return ovsid
+
+    def get_tenant_to_ovs_mac(self, topo):
+        ovsid = self.get_tenant_to_ovs_id(topo)
         mac = hex(int(ovsid, 10))
         mac = mac[2:]
         while len(mac) < 12:
@@ -243,70 +245,67 @@ class Vpc():
             + mac[6:8] + ':' + mac[8:10] + ':' + mac[10:]
         return mac
 
-    def set_tenant_cutin_to_ovs_id(self, to_ovs_id):
-        self.data["tenant"]["cutin"]["to_ovs_id"] = to_ovs_id
+    def set_tenant_cutin_to_node_id(self, to_node_id):
+        self.data["tenant"]["cutin"]["to_node_id"] = to_node_id
 
-    def set_tenant_cutin_type(self, type):
-        self.data["tenant"]["cutin"]["type"] = type
+    def get_tenant_cutin_to_node_ip(self):
+        return self.data["tenant"]["cutin"]["to_node_ip"]
 
-    def get_tenant_cutin_to_ovs_ip(self):
-        return self.data["tenant"]["cutin"]["to_ovs_ip"]
-
-    def set_tenant_cutin_to_ovs_ip(self, to_ovs_ip):
-        self.data["tenant"]["cutin"]["to_ovs_ip"] = to_ovs_ip
+    def set_tenant_cutin_to_node_ip(self, to_node_ip):
+        self.data["tenant"]["cutin"]["to_node_ip"] = to_node_ip
 
     def get_tenant_cutin_vid(self):
-        type = self.get_tenant_cutin_type()
-        if type != "vlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vlan+route":
             print("error, try to get vid while it's not vlan type")
             return None
         return self.data["tenant"]["cutin"]["vid"]
 
     def set_tenant_cutin_vid(self, vid):
-        type = self.get_tenant_cutin_type()
-        if type != "vlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vlan+route":
             print("error, try to get vid while it's not vlan type")
             return None
         self.data["tenant"]["cutin"]["vid"] = vid
 
     def get_tenant_cutin_vni(self):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get vni while it's not vxlan type")
             return None
         return self.data["tenant"]["cutin"]["vni"]
 
     def set_tenant_cutin_vni(self, vni):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get vni while it's not vxlan type")
             return None
         self.data["tenant"]["cutin"]["vni"] = vni
 
     def get_tenant_cutin_router_outer_ip(self):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_ip while it's not vxlan type")
             return None
         return self.data["tenant"]["cutin"]["router_outer_ip"]
 
     def set_tenant_cutin_router_outer_ip(self, router_outer_ip):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_ip while it's not vxlan type")
             return None
         self.data["tenant"]["cutin"]["router_outer_ip"] = router_outer_ip
 
     def get_tenant_cutin_router_outer_mac(self):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_mac while it's not vxlan type")
             return None
         return self.data["tenant"]["cutin"]["router_outer_mac"]
 
     def set_tenant_cutin_router_outer_mac(self, router_outer_mac):
-        type = self.get_tenant_cutin_type()
-        if type != "vxlan+route":
+        ctype = self.get_tenant_cutin_type()
+        if ctype != "vxlan+route":
             print("error, try to get router_outer_mac while it's not vxlan type")
             return None
         self.data["tenant"]["cutin"]["router_outer_mac"] = router_outer_mac
@@ -315,15 +314,25 @@ class Vpc():
         return self.data["endpoints"]
 
     def set_endpoints(self, endpoints):
+        for ep in endpoints:
+            self.ep_chain_refcnt[ep] = 0
         self.data["endpoints"] = endpoints
-    # limit chain id to 0~MAX_CHAIN_NUM, now 0~19
 
+    # limit chain id to 0~MAX_CHAIN_NUM, now 0~19
     def add_chain(self, data):
+        for ep in data["pass_through"]:
+            self.ep_chain_refcnt[ep] += 1
         self.chain_list.append(Vchain(data))
 
     def del_chain(self, chainid):
-        self.chain_list = [chain for chain in self.chain_list
-                           if chain.get_id() != chainid]
+        i = 0
+        for chain in self.chain_list:
+            if chain.get_id() == chainid:
+                for ep in chain.get_pass_through():
+                    self.ep_chain_refcnt[ep] -= 1
+                break
+            i += 1
+        del self.chain_list[i]
 
     def get_chain(self, chainid):
         for i, chain in enumerate(self.chain_list):
@@ -336,55 +345,55 @@ class Vpc():
                 self.chain_list[i].set_data(data)
 
     def get_chain_match(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_match()
 
     def set_chain_match(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_match(data)
 
     def get_chain_match_subnet(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_match_subnet()
 
     def set_chain_match_subnet(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_match_subnet(data)
 
     def get_chain_match_ethtype(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_match_ethtype()
 
     def set_chain_match_ethtype(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_match_ethtype(data)
 
     def get_chain_match_proto(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_match_proto()
 
     def set_chain_match_proto(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_match_proto(data)
 
     def get_chain_match_l4port(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_match_l4port()
 
     def set_chain_match_l4port(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_match_l4port(data)
 
     def get_chain_pass_through(self, chainid):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         return chain.get_pass_through()
 
     def set_chain_pass_through(self, chainid, data):
-        chain = get_chain(chainid)
+        chain = self.get_chain(chainid)
         chain.set_pass_through(data)
 
 
-class Vpclist():
+class Vpclist:
     def __init__(self, fname="vpc.json", nm="Vpclist"):
         self.fname = fname
         self.vpcs = []
@@ -396,7 +405,7 @@ class Vpclist():
         return self.data
 
     # limit vpc num to 0~MAX_VPC_NUM, now 0~63
-    def add_vpc(self, vpcid, data):
+    def add_vpc(self, data):
         self.vpcs.append(Vpc(data))
 
     def del_vpc(self, vpcid):
@@ -418,14 +427,15 @@ class Vpclist():
             self.data = json.load(f)
 
         for vpc in self.data:
-            self.add_vpc(vpc["id"], vpc)
+            self.add_vpc(vpc)
 
         for vpc in self.vpcs:
+            vpc.set_endpoints(vpc.data["endpoints"])
             for chain in vpc.data["chains"]:
                 vpc.add_chain(chain)
 
     def save_vpcs_to_file(self):
-        for vpc in vpcs:
+        for vpc in self.vpcs:
             self.data[vpc.get_id()] = vpc.get_data
         with open(self.fname, 'w') as f:
-            f.write(json.dumps(data))
+            f.write(json.dumps(self.data))

@@ -10,7 +10,8 @@ MAX_CHAIN_NUM = VPC_PRIO_STEP / CHAIN_PRIO_STEP
 # ingress: client->server; egress: server->client
 # h for half, p for path, r for rule
 
-class Chain_hprlist():
+
+class Chainprlist:
     def __init__(self):
         self.seq = 0
         self.ruleid = 0
@@ -65,12 +66,13 @@ class Chain_hprlist():
         node = {"type": "endpoint", "epid": epid, "in": in_mac, "out": out_mac}
         self.add_pnode(node)
 
-    def get_rule_table_and_prio(self, vpcid, chainid, dpid):
+    @staticmethod
+    def get_rule_table_and_prio(vpcid, chainid):
         prio = int(vpcid) * 1000 + int(chainid) * 50 + 100
         return 0, prio
 
     def add_rule(self, vpcid, chainid, epid, dpid, match, actions):
-        table_id, prio = self.get_rule_table_and_prio(vpcid, chainid, dpid)
+        table_id, prio = self.get_rule_table_and_prio(vpcid, chainid)
         rule = {"dpid": dpid, "table_id": table_id, "priority": prio,
                 "match": match, "actions": actions}
         rnode = {"vpcid": vpcid, "chainid": chainid,
@@ -78,14 +80,14 @@ class Chain_hprlist():
         self.add_rnode(rnode)
 
 
-class Vpc_prlist():
-    def __init__(self, nm="Vpc_prlist"):
+class Vpcprlist:
+    def __init__(self, nm="Vpcprlist"):
         self.name = nm
         self.data = []
         print("class %s instance create instance" % self.name)
 
     def create_vpc_path(self, vpcid):
-        if self.get_vpc_path(vpcid) == None:
+        if self.get_vpc_path(vpcid) is None:
             vpc_path = {"vpcid": vpcid, "chain": []}
             self.data.append(vpc_path)
 
@@ -108,19 +110,21 @@ class Vpc_prlist():
                 self.data[i] = vpcpath
 
     def create_chain_path(self, vpcid, chainid):
-        vpc = None
-        for i, path in enumerate(self.data):
+        vpc = {}
+        i = 0
+        for path in self.data:
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc == None:
-            self.create_vpc_path(vcpid)
-            for i, path in enumerate(self.data):
+            i += 1
+        if vpc is None:
+            self.create_vpc_path(vpcid)
+            i = 0
+            for path in self.data:
                 if path["vpcid"] == vpcid:
-                    vpc = self.data[i]
                     break
-
-        if self.get_chain_path(vpcid, chainid) == None:
+                i += 1
+        if self.get_chain_path(vpcid, chainid) is None:
             chain_path = {"chainid": chainid, "ingress": {}, "egress": {}}
             self.data[i]["chain"].append(chain_path)
 
@@ -131,7 +135,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             self.data[i]["chain"].append(chain)
 
     def del_chain_path(self, vpcid, chainid):
@@ -141,7 +145,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             self.data[i]["chain"] = [chain for chain in self.data[i]["chain"]
                                      if chain.get_id() != chainid]
 
@@ -152,7 +156,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             for j, path in enumerate(self.data[i]["chain"]):
                 if path["chainid"] == chainid:
                     return self.data[i]["chain"][j]
@@ -165,7 +169,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             for j, path in enumerate(self.data[i]["chain"]):
                 if path["chainid"] == chainid:
                     self.data[i]["chain"][j] = chain
@@ -177,7 +181,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             for j, path in enumerate(self.data[i]["chain"]):
                 if path["chainid"] == chainid:
                     self.data[i]["chain"][j]["ingress"]["pnodes"] = chain_ing.get_pnodes()
@@ -190,7 +194,7 @@ class Vpc_prlist():
             if path["vpcid"] == vpcid:
                 vpc = self.data[i]
                 break
-        if vpc != None:
+        if vpc is not None:
             for j, path in enumerate(self.data[i]["chain"]):
                 if path["chainid"] == chainid:
                     self.data[i]["chain"][j]["egress"]["pnodes"] = chain_egr.get_pnodes()
@@ -220,19 +224,38 @@ class Vpc_prlist():
                                 "/stats/flowentry/add\n")
 
     def gen_del_cmds(self, fname, topo):
+        with open(fname, 'w') as f:
+            for i, path in enumerate(self.data):
+                for j, chain in enumerate(path["chain"]):
+                    for rule in chain["ingress"]["rnodes"]:
+                        f.write("curl -X POST -d '")
+                        f.write(json.dumps(rule["rule"]))
+                        f.write("' " + "http://" +
+                                topo.get_controller_ip() + ":" +
+                                topo.get_controller_port() +
+                                "/stats/flowentry/delete_strict\n")
+                    for rule in chain["egress"]["rnodes"]:
+                        f.write("curl -X POST -d '")
+                        f.write(json.dumps(rule["rule"]))
+                        f.write("' " + "http://" +
+                                topo.get_controller_ip() + ":" +
+                                topo.get_controller_port() +
+                                "/stats/flowentry/delete_strict\n")
+
         print("gen del cmds")
 
 
-class Rule():
+class Rule:
     def __init__(self, fname_path="path.json",
                  fname_rule="rule.json",
                  fname_cmd="cmd.sh"):
         self.fname_path = fname_path
         self.fname_rule = fname_rule
         self.fname_cmd = fname_cmd
-        self.vprlist = Vpc_prlist("vprlist")
+        self.vprlist = Vpcprlist("vprlist")
 
-    def get_mac_by_dpid(self, ovsid):
+    @staticmethod
+    def get_mac_by_dpid(ovsid):
         mac = hex(int(ovsid, 10))
         mac = mac[2:]
         while len(mac) < 12:
@@ -253,33 +276,33 @@ class Rule():
                                    tcp_src, tcp_dst, udp_src, udp_dst):
         # no direction considered
         m = {}
-        if in_port != None:
+        if in_port is not None:
             m["in_port"] = in_port
-        if eth_type != None:
+        if eth_type is not None:
             m["eth_type"] = eth_type
-        if eth_dst != None:
+        if eth_dst is not None:
             m["eth_dst"] = eth_dst
-        if eth_src != None:
+        if eth_src is not None:
             m["eth_src"] = eth_src
-        if dl_vlan != None:
+        if dl_vlan is not None:
             m["dl_vlan"] = dl_vlan
-        if ipv4_src != None:
+        if ipv4_src is not None:
             m["ipv4_src"] = ipv4_src
-        if ipv4_dst != None:
+        if ipv4_dst is not None:
             m["ipv4_dst"] = ipv4_dst
-        if ipv6_src != None:
+        if ipv6_src is not None:
             m["ipv6_src"] = ipv6_src
-        if ipv6_dst != None:
+        if ipv6_dst is not None:
             m["ipv6_dst"] = ipv6_dst
-        if ip_proto != None:
+        if ip_proto is not None:
             m["ip_proto"] = ip_proto
-        if tcp_src != None:
+        if tcp_src is not None:
             m["tcp_src"] = tcp_src
-        if tcp_dst != None:
+        if tcp_dst is not None:
             m["tcp_dst"] = tcp_dst
-        if udp_src != None:
+        if udp_src is not None:
             m["udp_src"] = udp_src
-        if udp_dst != None:
+        if udp_dst is not None:
             m["udp_dst"] = udp_dst
 
         return m
@@ -429,7 +452,7 @@ class Rule():
                               field_dst, value_dst, act_vlan, value_vlan):
         act = []
 
-        if out_port == None:
+        if out_port is None:
             print("no output port, error")
             return act
         if field_src is not None:
@@ -497,7 +520,7 @@ class Rule():
 
     def calc_path_last_ep(self, dire, hprlist,
                           first_ovs_id, topo, ep, prevep):
-        if prevep == None:
+        if prevep is None:
             # prev is None, there is only one node in this chain
             self.calc_path_first_ep(dire, hprlist, first_ovs_id, topo, ep)
         else:
@@ -576,7 +599,7 @@ class Rule():
                 ep.get_id(), ep.get_out_mac(), ep.get_in_mac())
 
     def calc_path_one_dire(self, dire, vpc, topo, chain):
-        hprlist = Chain_hprlist()
+        hprlist = Chainprlist()
         length = len(chain.get_pass_through())
         if length == 0:
             print("there are no endpoints in this chain, default rule")
@@ -585,7 +608,7 @@ class Rule():
             pass_through = chain.get_pass_through()
             ep = topo.get_ep(pass_through[0])
             self.calc_path_last_ep(dire, hprlist,
-                                   vpc.get_tenant_cutin_to_ovs_id(),
+                                   vpc.get_tenant_to_ovs_id(topo),
                                    topo, ep, None)
             return hprlist
 
@@ -597,11 +620,11 @@ class Rule():
             ep = topo.get_ep(epid)
             if i == 0:
                 self.calc_path_first_ep(dire, hprlist,
-                                        vpc.get_tenant_cutin_to_ovs_id(), topo, ep)
+                                        vpc.get_tenant_to_ovs_id(topo), topo, ep)
             elif i == length - 1:
                 prev_epid = chain.get_pass_through()[i - 1]
                 self.calc_path_last_ep(dire, hprlist,
-                                       vpc.get_tenant_cutin_to_ovs_id(),
+                                       vpc.get_tenant_to_ovs_id(topo),
                                        topo, ep, topo.get_ep(prev_epid))
             else:
                 prev_epid = chain.get_pass_through()[i - 1]
@@ -613,6 +636,8 @@ class Rule():
     # rule calc functions
     def calc_rule_chain_first_switch(self, dire, vpc, chain,
                                      pnode, next_snode, next_hnode, hprlist):
+        match = {}
+        act = {}
         if pnode["out"] == pnode["in"]:
             oport = "IN_PORT"
         else:
@@ -661,8 +686,9 @@ class Rule():
 
     def calc_rule_chain_last_switch(self, dire, vpc, chain,
                                     pnode, prev_snode, prev_hnode, hprlist):
+        act = {}
 
-        if prev_snode == None:
+        if prev_snode is None:
             match = self.construct_rule_match(dire, pnode["in"],
                                               chain.get_match_ethtype(),
                                               self.get_mac_by_dpid(
@@ -705,18 +731,17 @@ class Rule():
         hprlist.add_rule(vpc.get_id(), chain.get_id(), "tenant",
                          pnode["dpid"], match, act)
 
-    def calc_rule_chain_mid_switch(self, dire, vpc, chain, pnode,
+    def calc_rule_chain_mid_switch(self, dire, topo, vpc, chain, pnode,
                                    prev_snode, prev_hnode, next_snode, next_hnode, hprlist):
-
         if pnode["out"] == pnode["in"]:
             oport = "IN_PORT"
         else:
             oport = pnode["out"]
 
-        if prev_snode == None:
+        if prev_snode is None:
             match = self.construct_rule_match(dire, pnode["in"],
                                               chain.get_match_ethtype(),
-                                              vpc.get_tenant_to_ovs_mac(),
+                                              vpc.get_tenant_to_ovs_mac(topo),
                                               prev_hnode["out"], None,
                                               chain.get_match_subnet(), chain.get_match_proto(),
                                               chain.get_match_l4port())
@@ -729,13 +754,13 @@ class Rule():
                                               chain.get_match_subnet(), chain.get_match_proto(),
                                               chain.get_match_l4port())
 
-        if next_snode == None:
+        if next_snode is None:
             act = self.construct_rule_action(oport,
-                                             "eth_src", vpc.get_tenant_to_ovs_mac(),
+                                             "eth_src", vpc.get_tenant_to_ovs_mac(topo),
                                              "eth_dst", next_hnode["in"],
                                              None, None)
         else:
-            if next_hnode == None:
+            if next_hnode is None:
                 act = self.construct_rule_action(oport,
                                                  "eth_src", self.get_mac_by_dpid(
                                                      pnode["dpid"]),
@@ -748,7 +773,7 @@ class Rule():
                                                      pnode["dpid"]),
                                                  "eth_dst", next_hnode["in"],
                                                  None, None)
-        if next_hnode == None:
+        if next_hnode is None:
             epid = "tenant"
         else:
             epid = next_hnode["epid"]
@@ -756,41 +781,39 @@ class Rule():
                          pnode["dpid"], match, act)
 
     def calc_rule_chain_bypass(self, dire, vpc, topo, chain, hprlist):
+        match = {}
         if vpc.get_tenant_cutin_type() == "route":
             match = self.construct_rule_match(dire,
-                                              topo.get_softsw_uplink_portno(
-                                                  vpc.get_tenant_cutin_to_ovs_id()),
+                                              topo.get_softsw_uplink_portno(vpc.get_tenant_to_ovs_id(topo)),
                                               chain.get_match_ethtype(),
-                                              vpc.get_tenant_to_ovs_mac(),
+                                              vpc.get_tenant_to_ovs_mac(topo),
                                               vpc.get_tenant_cutin_router_mac(), None,
                                               chain.get_match_subnet(), chain.get_match_proto(),
                                               chain.get_match_l4port())
         elif vpc.get_tenant_cutin_type() == "vlan+route":
             match = self.construct_rule_match(dire,
-                                              topo.get_softsw_uplink_portno(
-                                                  vpc.get_tenant_cutin_to_ovs_id()),
+                                              topo.get_softsw_uplink_portno(vpc.get_tenant_to_ovs_id(topo)),
                                               chain.get_match_ethtype(),
-                                              vpc.get_tenant_to_ovs_mac(),
+                                              vpc.get_tenant_to_ovs_mac(topo),
                                               vpc.get_tenant_cutin_router_mac(),
                                               vpc.get_tenant_cutin_vid(),
                                               chain.get_match_subnet(), chain.get_match_proto(),
                                               chain.get_match_l4port())
         elif vpc.get_tenant_cutin_type() == "vxlan+route":
             match = self.construct_rule_match(dire,
-                                              topo.get_softsw_uplink_portno(
-                                                  vpc.get_tenant_cutin_to_ovs_id()),
+                                              topo.get_softsw_uplink_portno(vpc.get_tenant_to_ovs_id(topo)),
                                               chain.get_match_ethtype(),
-                                              vpc.get_tenant_to_ovs_mac(),
+                                              vpc.get_tenant_to_ovs_mac(topo),
                                               vpc.get_tenant_cutin_router_mac(), None,
                                               chain.get_match_subnet(), chain.get_match_proto(),
                                               chain.get_match_l4port())
 
         act = self.construct_rule_action("IN_PORT",
-                                         "eth_src", vpc.get_tenant_to_ovs_mac(),
+                                         "eth_src", vpc.get_tenant_to_ovs_mac(topo),
                                          "eth_dst", vpc.get_tenant_cutin_router_mac(),
                                          None, None)
         hprlist.add_rule(vpc.get_id(), chain.get_id(), "tenant",
-                         vpc.get_tenant_cutin_to_ovs_id(), match, act)
+                         vpc.get_tenant_to_ovs_id(topo), match, act)
 
     def calc_rule_chain_one_dire(self, dire, vpc, topo, chain):
         hprlist = self.calc_path_one_dire(dire, vpc, topo, chain)
@@ -818,12 +841,12 @@ class Rule():
                 elif i == 1:
                     prev_snode = hprlist.get_pnode(i - 1)
                     next_hnode = hprlist.get_pnode(i + 1)
-                    self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
+                    self.calc_rule_chain_mid_switch(dire, topo, vpc, chain, pnode,
                                                     prev_snode, None, None, next_hnode, hprlist)
                 elif i == length - 2:
                     prev_hnode = hprlist.get_pnode(i - 1)
                     next_snode = hprlist.get_pnode(i + 1)
-                    self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
+                    self.calc_rule_chain_mid_switch(dire, topo, vpc, chain, pnode,
                                                     None, prev_hnode, next_snode, None, hprlist)
                 elif i == length - 1:
                     if hprlist.get_pnode(i - 1)["type"] == "switch":
@@ -842,18 +865,18 @@ class Rule():
                         prev_snode = hprlist.get_pnode(i - 1)
                         prev_hnode = hprlist.get_pnode(i - 2)
                         next_hnode = hprlist.get_pnode(i + 1)
-                        self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
+                        self.calc_rule_chain_mid_switch(dire, topo, vpc, chain, pnode,
                                                         prev_snode, prev_hnode, None, next_hnode, hprlist)
                     elif hprlist.get_pnode(i + 1)["type"] == "switch":
                         prev_hnode = hprlist.get_pnode(i - 1)
                         next_snode = hprlist.get_pnode(i + 1)
                         next_hnode = hprlist.get_pnode(i + 2)
-                        self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
+                        self.calc_rule_chain_mid_switch(dire, topo, vpc, chain, pnode,
                                                         None, prev_hnode, next_snode, next_hnode, hprlist)
                     else:
                         prev_hnode = hprlist.get_pnode(i - 1)
                         next_hnode = hprlist.get_pnode(i + 1)
-                        self.calc_rule_chain_mid_switch(dire, vpc, chain, pnode,
+                        self.calc_rule_chain_mid_switch(dire, topo, vpc, chain, pnode,
                                                         None, prev_hnode, None, next_hnode, hprlist)
         # print(json.dumps(hprlist.get_rnodes()))
         return hprlist
@@ -864,17 +887,11 @@ class Rule():
             self.add_vpc_rules(vpc, topo)
         # print(json.dumps(self.vprlist.data))
 
-    def get_vpclist_rules(self, vpclist):
-        return self.vprlist.data
-
-    def del_vpclist_rules(self, vpclist):
-        del self.vprlist.data
-
     def add_vpc_rules(self, vpc, topo):
         print("add vpc rules for " + json.dumps(vpc.get_data()))
         self.vprlist.create_vpc_path(vpc.get_id())
         for chain in vpc.chain_list:
-            #print("outer add chain rules for " + json.dumps(chain.get_data()))
+            # print("outer add chain rules for " + json.dumps(chain.get_data()))
             self.add_vpc_chain_rules(vpc, chain, topo)
 
     def get_vpc_rules(self, vpcid):
@@ -899,11 +916,7 @@ class Rule():
         self.vprlist.del_chain_path(vpcid, chainid)
 
     # for debug purpose
-    def get_vpc_chain_switch_rules(self, seq):
+    def get_topo_switch_rules(self, swid, topo):
         print("for debug purpose")
-
-    def get_endpoint_rules(self, seq):
-        print("for debug purpose")
-
-    def get_switch_rules(self, seq):
-        print("for debug purpose")
+        sw = topo.get_softsw(swid)
+        return sw
