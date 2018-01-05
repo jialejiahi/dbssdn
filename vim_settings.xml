@@ -62,22 +62,22 @@
         <mark key="." line="56" column="34" />
         <mark key="^" line="56" column="34" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" timestamp="1515139803056">
-        <mark key="'" line="147" column="4" />
-        <mark key="[" line="146" column="0" />
-        <mark key="]" line="150" column="0" />
-        <mark key="." line="146" column="0" />
-        <mark key="^" line="199" column="16" />
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" timestamp="1515141123264">
+        <mark key="'" line="151" column="4" />
+        <mark key="[" line="149" column="38" />
+        <mark key="]" line="149" column="52" />
+        <mark key="." line="149" column="52" />
+        <mark key="^" line="149" column="52" />
       </file>
       <file name="/usr/lib/python2.7/site-packages/ryu/app/wsgi.py" timestamp="1515045099620">
         <mark key="'" line="287" column="8" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515139713246">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515141716998">
         <mark key="'" line="294" column="19" />
-        <mark key="[" line="151" column="0" />
-        <mark key="]" line="151" column="0" />
-        <mark key="." line="151" column="0" />
-        <mark key="^" line="201" column="68" />
+        <mark key="[" line="346" column="47" />
+        <mark key="]" line="346" column="83" />
+        <mark key="." line="346" column="83" />
+        <mark key="^" line="346" column="83" />
       </file>
     </filemarks>
     <jumps>
@@ -183,17 +183,17 @@
       <jump line="147" column="4" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
     </jumps>
     <registers>
-      <register name="&quot;" type="2">
-        <text encoding="base64">ICAgIGRlZiBkZWxfc29mdHN3KHNlbGYsIHN3aWQpOgogICAgICAgIHNlbGYuc29mdF9zd2l0Y2hzID0gW3N3IGZvciBzdyBpbiBzZWxmLnNvZnRfc3dpdGNocwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIHN3LmdldF9pZCgpICE9IHN3aWRdCiAgICAgICAgc2VsZi5zd19yZWZjbnQgLT0gMQoK</text>
+      <register name="&quot;" type="4">
+        <text>chain</text>
       </register>
       <register name="-" type="4">
-        <text>vpcid</text>
+        <text>chain</text>
       </register>
       <register name="/" type="4">
         <text>sw_ep_refcnt</text>
       </register>
       <register name="0" type="2">
-        <text encoding="base64">ICAgIEBkYXNfc2V0X21ldGhvZAo=</text>
+        <text encoding="base64">ICAgICAgICAgICAgIzEuIGZpcnN0bHkgZGVsZXRlIGFsbCB0aGUgcnVsZXMgYW5kIGZsb3dzIG9mIHRoaXMgY2hhaW4KICAgICAgICAgICAgc2VsZi5ydWxlLmRlbF92cGNfY2hhaW5fcnVsZXModnBjLmdldF9pZCgpLCBjaGFpbikK</text>
       </register>
       <register name="1" type="2">
         <text encoding="base64">ICAgIGRlZiBkZWxfc29mdHN3KHNlbGYsIHN3aWQpOgogICAgICAgIHNlbGYuc29mdF9zd2l0Y2hzID0gW3N3IGZvciBzdyBpbiBzZWxmLnNvZnRfc3dpdGNocwogICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlmIHN3LmdldF9pZCgpICE9IHN3aWRdCiAgICAgICAgc2VsZi5zd19yZWZjbnQgLT0gMQoK</text>
