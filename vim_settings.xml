@@ -81,16 +81,15 @@
       <file name="/usr/lib/python2.7/site-packages/ryu/app/wsgi.py" timestamp="1515045099620">
         <mark key="'" line="287" column="8" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515468856458">
-        <mark key="'" line="43" column="13" />
-        <mark key="[" line="30" column="32" />
-        <mark key="]" line="30" column="36" />
-        <mark key="^" line="30" column="36" />
-        <mark key="." line="30" column="36" />
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515487049574">
+        <mark key="'" line="710" column="0" />
+        <mark key="[" line="662" column="72" />
+        <mark key="]" line="662" column="72" />
+        <mark key="^" line="662" column="72" />
+        <mark key="." line="662" column="72" />
       </file>
     </filemarks>
     <jumps>
-      <jump line="233" column="47" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="321" column="29" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="329" column="39" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="317" column="17" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
@@ -190,13 +189,14 @@
       <jump line="670" column="15" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="899" column="34" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="43" column="13" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
+      <jump line="710" column="0" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
     </jumps>
     <registers>
       <register name="&quot;" type="4">
-        <text>stats</text>
+        <text>u</text>
       </register>
       <register name="-" type="4">
-        <text>stats</text>
+        <text>u</text>
       </register>
       <register name="/" type="4">
         <text>flowentry</text>
@@ -316,6 +316,9 @@
       </shortcut-conflict>
       <shortcut-conflict owner="vim">
         <text>ctrl pressed C</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed R</text>
       </shortcut-conflict>
     </shortcut-conflicts>
   </component>
