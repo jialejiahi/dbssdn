@@ -8,11 +8,11 @@
         <mark key="]" line="0" column="0" />
         <mark key="." line="0" column="0" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" timestamp="1515556753298">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" timestamp="1515565740980">
         <mark key="'" line="314" column="18" />
-        <mark key="[" line="329" column="45" />
-        <mark key="]" line="329" column="53" />
-        <mark key="." line="329" column="53" />
+        <mark key="[" line="438" column="0" />
+        <mark key="]" line="438" column="0" />
+        <mark key="." line="437" column="49" />
         <mark key="^" line="329" column="53" />
       </file>
       <file name="/Python Console" timestamp="1514442976491">
@@ -31,12 +31,12 @@
         <mark key="." line="474" column="41" />
         <mark key="^" line="474" column="15" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515564940995">
-        <mark key="'" line="905" column="37" />
-        <mark key="[" line="242" column="34" />
-        <mark key="]" line="242" column="36" />
-        <mark key="^" line="242" column="36" />
-        <mark key="." line="242" column="36" />
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515566419023">
+        <mark key="'" line="904" column="21" />
+        <mark key="[" line="114" column="66" />
+        <mark key="]" line="114" column="66" />
+        <mark key="^" line="114" column="67" />
+        <mark key="." line="114" column="66" />
       </file>
       <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/cmd.sh" timestamp="1514512026381">
         <mark key="'" line="18" column="0" />
@@ -71,27 +71,25 @@
         <mark key="." line="56" column="34" />
         <mark key="^" line="56" column="34" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" timestamp="1515556702340">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" timestamp="1515565632001">
         <mark key="'" line="87" column="13" />
-        <mark key="[" line="153" column="38" />
-        <mark key="]" line="153" column="43" />
-        <mark key="." line="153" column="43" />
+        <mark key="[" line="158" column="0" />
+        <mark key="]" line="162" column="73" />
+        <mark key="." line="158" column="0" />
         <mark key="^" line="153" column="43" />
       </file>
       <file name="/usr/lib/python2.7/site-packages/ryu/app/wsgi.py" timestamp="1515045099620">
         <mark key="'" line="287" column="8" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515563927728">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" timestamp="1515565804945">
         <mark key="'" line="322" column="0" />
-        <mark key="[" line="393" column="33" />
-        <mark key="]" line="393" column="35" />
+        <mark key="[" line="265" column="0" />
+        <mark key="]" line="265" column="0" />
         <mark key="^" line="393" column="35" />
-        <mark key="." line="393" column="35" />
+        <mark key="." line="265" column="0" />
       </file>
     </filemarks>
     <jumps>
-      <jump line="416" column="28" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="446" column="31" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="470" column="31" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="248" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="264" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
@@ -128,7 +126,6 @@
       <jump line="323" column="26" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="332" column="34" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="200" column="26" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
-      <jump line="904" column="57" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="915" column="21" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="96" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="140" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
@@ -190,64 +187,65 @@
       <jump line="306" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="322" column="0" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="905" column="37" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="130" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="111" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="904" column="21" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
     </jumps>
     <registers>
       <register name="&quot;" type="4">
-        <text>l</text>
+        <text>,</text>
       </register>
       <register name="-" type="4">
-        <text>l</text>
+        <text>,</text>
       </register>
       <register name="/" type="4">
-        <text>vpc_del</text>
+        <text encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</text>
       </register>
       <register name="0" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgdnBjLmFkZF9lcChzZWxmLnRvcG8uZ2V0X2VwKGVwaWQpKQo=</text>
+        <text encoding="base64">ICAgICAgICAgICAgdnBjID0gc2VsZi52cGNsaXN0LmdldF92cGModnBjaWQpCiAgICAgICAgICAgIGlmIHZwYy5nZXRfZW5kcG9pbnRzKCkgaXMgTm9uZToKICAgICAgICAgICAgICAgIHNlbGYudnBjbGlzdC5kZWxfdnBjKHZwY2lkKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgcHJpbnQoInRoZXJlIGFyZSBlbmRwb2ludHMgaW4gdnBjICVzLCBjYW5uJ3QgZGVsZXRlIiAlIHZwY2lkKQo=</text>
       </register>
       <register name="1" type="2">
-        <text encoding="base64">Cg==</text>
+        <text encoding="base64">ICAgICAgICAgICAgcHJpbnQoImlkcyBpcyAlcyIgJSBpZHMpCg==</text>
       </register>
       <register name="2" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgIyAxLiBtYWtlIHN1cmUgbm8gdnBjIGlzIHVzaW5nIHRoaXMgZXAKICAgICAgICAgICAgZXAgPSBzZWxmLnRvcG8uZ2V0X2VwKGVwaWQpCg==</text>
+        <text encoding="base64">ICAgICAgICBwcmludCgicmV0IGlzICIgKyBzdHIocmV0KSkK</text>
       </register>
       <register name="3" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgICAgIHByaW50KCJlbmRwb2ludCAlcyBzdGlsbCBpbiB1c2UgY2Fubid0IGRlbGV0ZSIgJSBlcGlkKQo=</text>
+        <text encoding="base64">ICAgICAgICAgICAgZWxzZToKICAgICAgICAgICAgICAgIHByaW50KCJ0aGVyZSBhcmUgZW5kcG9pbnRzIGluIHZwYyAlcywgY2Fubid0IGRlbGV0ZSIgJSB2cGNpZCkK</text>
       </register>
       <register name="4" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgZWxzZToK</text>
+        <text encoding="base64">ICAgICAgICAgICAgIyAxLiBjaGVjayB0aGF0IGFsbCB0aGUgZXAgb2YgdGhpcyB2cGMgYXJlIGRlbGV0ZWQKICAgICAgICAgICAgdnBjID0gc2VsZi52cGNsaXN0LmdldF92cGModnBjaWQpCiAgICAgICAgICAgIGlmIHZwYy5nZXRfZW5kcG9pbnRzKCkgaXMgTm9uZToK</text>
       </register>
       <register name="5" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgaWYgZXAuZXBfdnBjX3JlZmNudCA9PSAwOgo=</text>
+        <text encoding="base64">ICAgICAgICAgICAgc2VsZi5kZWxfdnBjKHZwY2lkKQo=</text>
       </register>
       <register name="6" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgaWYgZXAuZXBfdnBjX3JlZmNudCA9PSAK</text>
+        <text encoding="base64">ICAgICAgICBzZWxmLnZwY3MgPSBbdnBjIGZvciB2cGMgaW4gc2VsZi52cGNzCiAgICAgICAgICAgICAgICAgICAgIGlmIHZwYy5nZXRfaWQoKSAhPSB2cGNpZF0K</text>
       </register>
       <register name="7" type="2">
-        <text encoding="base64">ICAgICAgICBlcC5lcF92cGNfcmVmY250ID0gMAo=</text>
+        <text encoding="base64">Cg==</text>
       </register>
       <register name="8" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgaWYgZXBpZCBub3QgaW4gdnBjLmRhdGFbImVuZHBvaW50cyJdOgogICAgICAgICAgICAgICAgZXAgPSBzZWxmLnRvcG8uZ2V0X2VwKGVwaWQpCiAgICAgICAgICAgICAgICBlcC5lcF92cGNfcmVmY250ICs9IDEKICAgICAgICAgICAgICAgIHZwYy5kYXRhWyJlbmRwb2ludHMiXS5hcHBlbmQoZXBpZCkK</text>
+        <text encoding="base64">ICAgICAgICAgICAgIyAxLiBtYWtlIHN1cmUgbm8gdnBjIGlzIHVzaW5nIHRoaXMgZXAKICAgICAgICAgICAgZXAgPSBzZWxmLnRvcG8uZ2V0X2VwKGVwaWQpCg==</text>
       </register>
       <register name="9" type="2">
-        <text encoding="base64">Cg==</text>
+        <text encoding="base64">ICAgICAgICAgICAgICAgIHByaW50KCJlbmRwb2ludCAlcyBzdGlsbCBpbiB1c2UgY2Fubid0IGRlbGV0ZSIgJSBlcGlkKQo=</text>
       </register>
       <register name=":" type="4">
         <text>w</text>
       </register>
     </registers>
     <search>
-      <last-search>vpc_del</last-search>
+      <last-search encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</last-search>
       <last-offset />
-      <last-pattern>vpc_del</last-pattern>
+      <last-pattern encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</last-pattern>
       <last-replace>ep</last-replace>
       <last-substitute>chain</last-substitute>
-      <last-dir>1</last-dir>
+      <last-dir>-1</last-dir>
       <show-last>false</show-last>
     </search>
     <history>
       <history-search>
-        <entry>del_</entry>
-        <entry>ep_vpc_refcnt</entry>
         <entry>endpoi</entry>
         <entry>chain</entry>
         <entry>topo</entry>
@@ -266,6 +264,8 @@
         <entry encoding="base64">XDxlcF92cGNfcmVmY250XD4=</entry>
         <entry>ref</entry>
         <entry>vpc_del</entry>
+        <entry encoding="base64">XDxhZGRfY2hhaW5fcGF0aFw+</entry>
+        <entry encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</entry>
       </history-search>
       <history-cmd>
         <entry encoding="base64">JzwsJz5zL2VwL3ZwYy9n</entry>
