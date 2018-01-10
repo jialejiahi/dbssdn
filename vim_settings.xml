@@ -31,12 +31,12 @@
         <mark key="." line="474" column="41" />
         <mark key="^" line="474" column="15" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515566419023">
-        <mark key="'" line="904" column="21" />
-        <mark key="[" line="114" column="66" />
-        <mark key="]" line="114" column="66" />
-        <mark key="^" line="114" column="67" />
-        <mark key="." line="114" column="66" />
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515571131535">
+        <mark key="'" line="526" column="18" />
+        <mark key="[" line="121" column="17" />
+        <mark key="]" line="121" column="18" />
+        <mark key="^" line="121" column="18" />
+        <mark key="." line="121" column="18" />
       </file>
       <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/cmd.sh" timestamp="1514512026381">
         <mark key="'" line="18" column="0" />
@@ -90,20 +90,6 @@
       </file>
     </filemarks>
     <jumps>
-      <jump line="470" column="31" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="248" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="264" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="471" column="39" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="176" column="12" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="238" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="569" column="57" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="359" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="614" column="56" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="634" column="57" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
-      <jump line="163" column="12" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
-      <jump line="195" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
-      <jump line="191" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
-      <jump line="187" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
       <jump line="183" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
       <jump line="179" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
       <jump line="175" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
@@ -187,22 +173,36 @@
       <jump line="306" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="322" column="0" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="905" column="37" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
-      <jump line="130" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="111" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
       <jump line="904" column="21" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="97" column="44" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="121" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="919" column="50" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="0" column="0" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="106" column="36" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="527" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="694" column="22" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="744" column="22" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="760" column="22" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="766" column="26" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="779" column="22" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="89" column="36" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="130" column="47" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="458" column="20" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
+      <jump line="526" column="18" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" />
     </jumps>
     <registers>
       <register name="&quot;" type="4">
-        <text>,</text>
+        <text>:</text>
       </register>
       <register name="-" type="4">
-        <text>,</text>
+        <text>:</text>
       </register>
       <register name="/" type="4">
-        <text encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</text>
+        <text>is None</text>
       </register>
       <register name="0" type="2">
-        <text encoding="base64">ICAgICAgICAgICAgdnBjID0gc2VsZi52cGNsaXN0LmdldF92cGModnBjaWQpCiAgICAgICAgICAgIGlmIHZwYy5nZXRfZW5kcG9pbnRzKCkgaXMgTm9uZToKICAgICAgICAgICAgICAgIHNlbGYudnBjbGlzdC5kZWxfdnBjKHZwY2lkKQogICAgICAgICAgICBlbHNlOgogICAgICAgICAgICAgICAgcHJpbnQoInRoZXJlIGFyZSBlbmRwb2ludHMgaW4gdnBjICVzLCBjYW5uJ3QgZGVsZXRlIiAlIHZwY2lkKQo=</text>
+        <text encoding="base64">ICAgICAgICAgICAgICAgICAgICBwcmludCAidnBjIGxvb3AgMiBpID0gJWQiICUgaQo=</text>
       </register>
       <register name="1" type="2">
         <text encoding="base64">ICAgICAgICAgICAgcHJpbnQoImlkcyBpcyAlcyIgJSBpZHMpCg==</text>
@@ -236,18 +236,16 @@
       </register>
     </registers>
     <search>
-      <last-search encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</last-search>
+      <last-search>is None</last-search>
       <last-offset />
-      <last-pattern encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</last-pattern>
+      <last-pattern>is None</last-pattern>
       <last-replace>ep</last-replace>
       <last-substitute>chain</last-substitute>
-      <last-dir>-1</last-dir>
+      <last-dir>1</last-dir>
       <show-last>false</show-last>
     </search>
     <history>
       <history-search>
-        <entry>endpoi</entry>
-        <entry>chain</entry>
         <entry>topo</entry>
         <entry>set_endp</entry>
         <entry>load_vpcs</entry>
@@ -266,6 +264,8 @@
         <entry>vpc_del</entry>
         <entry encoding="base64">XDxhZGRfY2hhaW5fcGF0aFw+</entry>
         <entry encoding="base64">XDxjcmVhdGVfY2hhaW5fcGF0aFw+</entry>
+        <entry>if vpc is None</entry>
+        <entry>is None</entry>
       </history-search>
       <history-cmd>
         <entry encoding="base64">JzwsJz5zL2VwL3ZwYy9n</entry>
