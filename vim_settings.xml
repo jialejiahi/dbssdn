@@ -8,8 +8,8 @@
         <mark key="]" line="0" column="0" />
         <mark key="." line="0" column="0" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" timestamp="1515651089700">
-        <mark key="'" line="317" column="8" />
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" timestamp="1515653010980">
+        <mark key="'" line="438" column="25" />
         <mark key="[" line="362" column="34" />
         <mark key="]" line="363" column="0" />
         <mark key="." line="363" column="0" />
@@ -167,7 +167,6 @@
       <jump line="573" column="64" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="588" column="57" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="431" column="27" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
-      <jump line="312" column="24" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="152" column="14" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
       <jump line="24" column="13" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
       <jump line="212" column="19" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" />
@@ -179,7 +178,6 @@
       <jump line="473" column="20" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="329" column="0" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="361" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
-      <jump line="438" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="351" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="439" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
       <jump line="317" column="8" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
@@ -190,6 +188,8 @@
       <jump line="326" column="28" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="341" column="25" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
       <jump line="386" column="16" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/das_rest.py" />
+      <jump line="312" column="24" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
+      <jump line="438" column="25" filename="/lib/python2.7/site-packages/ryu/app/dbssdn/vpc.py" />
     </jumps>
     <registers>
       <register name="&quot;" type="4">
@@ -199,7 +199,7 @@
         <text encoding="base64">ICAgICAgICA=</text>
       </register>
       <register name="/" type="4">
-        <text>del_</text>
+        <text encoding="base64">XDxWcGNcPg==</text>
       </register>
       <register name="0" type="2">
         <text encoding="base64">ICAgICAgICAgICAgICAgICAgICBwcmludCAidnBjIGxvb3AgMiBpID0gJWQiICUgaQo=</text>
@@ -236,18 +236,16 @@
       </register>
     </registers>
     <search>
-      <last-search>del_</last-search>
+      <last-search encoding="base64">XDxWcGNcPg==</last-search>
       <last-offset />
-      <last-pattern>del_</last-pattern>
+      <last-pattern encoding="base64">XDxWcGNcPg==</last-pattern>
       <last-replace>ep</last-replace>
       <last-substitute>chain</last-substitute>
-      <last-dir>1</last-dir>
+      <last-dir>-1</last-dir>
       <show-last>false</show-last>
     </search>
     <history>
       <history-search>
-        <entry>del_vpc</entry>
-        <entry>refcnt</entry>
         <entry encoding="base64">XDxlcF92cGNfcmVmY250XD4=</entry>
         <entry>ref</entry>
         <entry>vpc_del</entry>
@@ -266,6 +264,8 @@
         <entry encoding="base64">XDxzd19lcF9yZWZjbnRcPg==</entry>
         <entry encoding="base64">XDxnZXRfdGVuYW50XD4=</entry>
         <entry>del_</entry>
+        <entry>add_vpc</entry>
+        <entry encoding="base64">XDxWcGNcPg==</entry>
       </history-search>
       <history-cmd>
         <entry encoding="base64">JzwsJz5zL2VwL3ZwYy9n</entry>
