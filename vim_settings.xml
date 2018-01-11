@@ -31,12 +31,12 @@
         <mark key="." line="474" column="41" />
         <mark key="^" line="474" column="15" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515657227841">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/rule.py" timestamp="1515658905301">
         <mark key="'" line="155" column="37" />
-        <mark key="[" line="98" column="27" />
-        <mark key="]" line="98" column="27" />
-        <mark key="^" line="98" column="34" />
-        <mark key="." line="98" column="27" />
+        <mark key="[" line="114" column="9" />
+        <mark key="]" line="114" column="9" />
+        <mark key="^" line="114" column="9" />
+        <mark key="." line="114" column="9" />
       </file>
       <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/cmd.sh" timestamp="1514512026381">
         <mark key="'" line="18" column="0" />
@@ -50,10 +50,12 @@
         <mark key="]" line="349" column="18" />
         <mark key="." line="230" column="0" />
       </file>
-      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/main.py" timestamp="1514514909383">
+      <file name="/lib/python2.7/site-packages/ryu/app/dbssdn/main.py" timestamp="1515661481976">
         <mark key="'" line="2" column="35" />
-        <mark key="[" line="6" column="0" />
-        <mark key="]" line="19" column="22" />
+        <mark key="[" line="14" column="28" />
+        <mark key="]" line="14" column="31" />
+        <mark key="^" line="14" column="31" />
+        <mark key="." line="14" column="31" />
       </file>
       <file name="/usr/lib/python2.7/site-packages/ryu/app/dbssdn/topo.py" timestamp="1514441954240">
         <mark key="'" line="109" column="26" />
