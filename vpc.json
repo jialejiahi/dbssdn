@@ -9,8 +9,8 @@
                 "type": "route",
                 "router_ip":"192.168.44.254",
                 "router_mac":"02:00:0a:0b:58:98",
-                "to_ovs_id":"156399244705346",
-                "to_ovs_ip": "192.168.44.1"
+                "to_node_id":"node0",
+                "to_node_ip": "192.168.44.1"
             }
         },
         "endpoints":[
@@ -54,8 +54,8 @@
                 "vid": 100,
                 "router_ip":"192.168.45.254",
                 "router_mac":"02:00:0a:0b:58:98",
-                "to_ovs_id":"156399244705346",
-                "to_ovs_ip": "192.168.45.1"
+                "to_node_id":"node1",
+                "to_node_ip": "192.168.45.1"
             }
         },
         "endpoints":[

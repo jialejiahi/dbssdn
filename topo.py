@@ -4,7 +4,7 @@ MAX_HOST_NUM = 10000
 MAX_SWITCH_NUM = 1000
 
 
-class Controller():
+class Controller:
     def __init__(self, data):
         self.data = data
         # print("class Controller instance create url %s %s" \
@@ -17,11 +17,13 @@ class Controller():
         return self.data["port"]
 
 
-class Softsw():
+class Softsw:
     def __init__(self, data):
         self.data = data
-        uplink_port_no = -1
-        tun_uplink_port_no = -1
+        self.uplink_port_no = -1
+        self.tun_uplink_port_no = -1
+        self.sw_ep_refcnt = 0
+        self.portdesc = []
         print("class Softsw instance create id %s" % self.data["id"])
 
     def get_mac_from_id(self):
@@ -35,6 +37,9 @@ class Softsw():
 
     def get_id(self):
         return self.data["id"]
+
+    def get_node_id(self):
+        return self.data["node_id"]
 
     def set_id(self, swid):
         self.data["id"] = swid
@@ -77,9 +82,10 @@ class Softsw():
         self.portdesc = portdesc
 
 
-class Endpoint():
+class Endpoint:
     def __init__(self, data):
         self.data = data
+        self.ep_vpc_refcnt = 0
         print("class Endpoints instance create id %s" % self.data["id"])
 
     def get_id(self):
@@ -113,13 +119,15 @@ class Endpoint():
         self.data["to_ovs_id"] = sw_id
 
 
-class Topo():
+class Topo:
     def __init__(self, fname="topo.json", nm="Topo"):
         self.soft_switchs = []
         self.ep_list = []
         self.controller = None
         self.fname = fname
         self.name = nm
+        self.sw_refcnt = 0
+        self.data = {}
         print("class %s instance create instance" % self.name)
 
     def add_controller(self, data):
@@ -136,20 +144,31 @@ class Topo():
 
     def add_softsw(self, data):
         self.soft_switchs.append(Softsw(data))
+        self.sw_refcnt += 1
+
+    def del_softsw(self, swid):
+        sw = self.get_softsw(swid)
+        if sw.sw_ep_refcnt != 0:
+            print("switch still in use, cann't delete")
+            return
+        self.soft_switchs = [sw for sw in self.soft_switchs
+                             if sw.get_id() != swid]
+        self.sw_refcnt -= 1
 
     def set_softsw(self, swid, data):
         for i, sw in enumerate(self.soft_switchs):
             if sw.get_id() == swid:
                 self.soft_switchs[i].set_data(data)
 
-    def del_softsw(self, swid):
-        self.soft_switchs = [sw for sw in self.soft_switchs
-                             if sw.get_id() != swid]
-
     def get_softsw(self, swid):
         for i, sw in enumerate(self.soft_switchs):
             if sw.get_id() == swid:
                 return self.soft_switchs[i]
+
+    def get_ovs_id_by_node(self, node_id):
+        for i, sw in enumerate(self.soft_switchs):
+            if sw.get_node_id() == node_id:
+                return sw.get_id()
 
     def get_softsw_uplink_portno(self, swid):
         sw = self.get_softsw(swid)
@@ -172,11 +191,19 @@ class Topo():
         return sw.set_portdesc(portdesc)
 
     def add_ep(self, data):
+        sw = self.get_softsw(data["to_ovs_id"])
+        sw.sw_ep_refcnt += 1
         self.ep_list.append(Endpoint(data))
 
     def del_ep(self, epid):
-        self.ep_list = [ep for ep in self.ep_list
-                        if ep.get_id() != epid]
+        i = 0
+        for ep in self.ep_list:
+            if ep.get_id() == epid:
+                sw = self.get_softsw(ep.get_sw_id())
+                sw.sw_ep_refcnt += 1
+                break
+            i += 1
+        del self.ep_list[i]
 
     def get_ep(self, epid):
         for i, ep in enumerate(self.ep_list):
@@ -189,26 +216,26 @@ class Topo():
                 self.ep_list[i].set_data(data)
 
     def get_ep_in_mac(self, epid):
-        ep = get_ep(epid)
+        ep = self.get_ep(epid)
         return ep.get_in_mac()
 
     def get_ep_out_mac(self, epid):
-        ep = get_ep(epid)
+        ep = self.get_ep(epid)
         return ep.get_out_mac()
 
     def get_ep_sw_id(self, epid):
-        ep = get_ep(epid)
+        ep = self.get_ep(epid)
         return ep.get_sw_id()
 
     def get_ep_in_port(self, epid):
-        mac = get_ep_in_mac(epid)
-        swid = get_ep_sw_id(epid)
-        return get_softsw_portno_by_mac(swid, mac)
+        mac = self.get_ep_in_mac(epid)
+        swid = self.get_ep_sw_id(epid)
+        return self.get_softsw_portno_by_mac(swid, mac)
 
     def get_ep_out_port(self, epid):
-        mac = get_ep_out_mac(epid)
-        swid = get_ep_sw_id(epid)
-        return get_softsw_portno_by_mac(swid, mac)
+        mac = self.get_ep_out_mac(epid)
+        swid = self.get_ep_sw_id(epid)
+        return self.get_softsw_portno_by_mac(swid, mac)
 
     def load_topo_from_file(self):
         with open(self.fname, 'r+') as f:
@@ -222,10 +249,10 @@ class Topo():
             self.add_ep(ep)
 
     def save_topo_to_file(self):
-        for ssw in soft_switchs:
+        for ssw in self.soft_switchs:
             self.data["softsw"][ssw.get_id()] = ssw.get_data()
-        for ep in ep_list:
+        for ep in self.ep_list:
             self.data["endpoints"][ep.get_id()] = ep.get_data()
 
         with open(self.fname, 'r+') as f:
-            f.write(json.dumps(data))
+            f.write(json.dumps(self.data))
